@@ -1,9 +1,7 @@
 from aiogram import Bot, Dispatcher, executor, types
 import keyboards as kb
 from multiprocessing import Process
-from threading import Thread
 import asyncio
-import queue
 from config import TOKEN
 import parser
 import db
@@ -53,27 +51,23 @@ async def show_incorrectness(message: types.Message):
 
 # Function which is run in a new thread and creates a final formatted message
 # which will be put into queue and afterall sent to the user.
-def create_message(db_news: list, message_queue: queue.Queue) -> None:
+def create_message(db_news: list) -> str:
     message = ''
 
-    for i in db_news:
-        message += f'• <a href="{i.get("link")}">{i.get("article")}</a>\n\n'
+    for section in db_news:
+        message += f'• <a href="{section.get("link")}">{section.get("article")}</a>\n\n'
 
-    message_queue.put(message)
+    return message
 
 
 @dp.callback_query_handler()
 async def callback_query_keyboard(callback_query: types.CallbackQuery):
-    message_queue = queue.Queue()
-
     await connection.create_pool()
     db_news = await connection.get_news(callback_query.data)
 
-    Thread(target=create_message, args=[db_news, message_queue]).start()
+    message = await asyncio.to_thread(create_message, db_news)
 
-    await asyncio.sleep(0.1)
-
-    await bot.send_message(callback_query.from_user.id, text=f'{message_queue.get(block=False)}', parse_mode='HTML',
+    await bot.send_message(callback_query.from_user.id, text=f'{message}', parse_mode='HTML',
                            disable_web_page_preview=True)
 
 
