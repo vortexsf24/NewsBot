@@ -49,8 +49,7 @@ async def show_incorrectness(message: types.Message):
     await message.reply(f"If you are confused, use /help")
 
 
-# Function which is run in a new thread and creates a final formatted message
-# which will be put into queue and afterall sent to the user.
+# Function which is run in a new thread and creates a final formatted message which will be sent to the user.
 def create_message(db_news: list) -> str:
     message = ''
 
