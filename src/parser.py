@@ -263,20 +263,6 @@ async def parse_sportingnews() -> tuple:
         return 'sportingnews', [_ for _ in zip(articles, links)]
 
 
-async def parse_deadspin() -> tuple:
-    async with aiohttp.ClientSession() as session:
-        html = await fetch(session, URL.get('deadspin'))
-        soup = BeautifulSoup(html, 'lxml')
-
-        links = tuple(elem.get('href') for elem in
-                      soup.find('div', class_='sc-1w4b9xk-0 ffAumw').findAll('a',
-                                                                             class_='sc-1out364-0 dPMosf sc-1pw4fyi-5 hkpnLX js_link'))
-        articles = tuple(elem.text.replace('\n', '').strip() for elem in
-                         soup.find('div', class_='sc-1w4b9xk-0 ffAumw').findAll('h4', class_='sc-1qoge05-0 nvHxA'))
-
-        return 'deadspin', [_ for _ in zip(articles, links)]
-
-
 async def parse_cnn_sport() -> tuple:
     async with aiohttp.ClientSession() as session:
         html = await fetch(session, URL.get('cnn_sport'))
@@ -323,7 +309,6 @@ async def main() -> None:
             asyncio.create_task(parse_bbc()),
             asyncio.create_task(parse_euronews()),
             asyncio.create_task(parse_rt()),
-            asyncio.create_task(parse_deadspin()),
             asyncio.create_task(parse_xfire()),
             asyncio.create_task(parse_vg247()),
             asyncio.create_task(parse_sportingnews()),

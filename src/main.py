@@ -5,7 +5,7 @@ import asyncio
 from config import TOKEN
 import parser
 import db
-
+import os
 
 bot = Bot(TOKEN)
 dp = Dispatcher(bot=bot)
@@ -14,7 +14,8 @@ connection = db.DbConnection()
 
 @dp.message_handler(commands=['start'])
 async def cmd_start(message: types.Message):
-    await bot.send_animation(chat_id=message.chat.id, animation=open(r'...\media\greeting_gif.mp4', 'rb'))
+    await bot.send_animation(chat_id=message.chat.id,
+                             animation=open(os.path.join(os.getcwd(), '..', 'media', 'greeting_gif.mp4'), 'rb'))
     await message.answer(f"Welcome, {message.from_user.first_name}!", reply_markup=kb.main_keyboard)
 
 
