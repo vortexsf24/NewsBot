@@ -2,14 +2,17 @@ import os
 
 from aiogram import Dispatcher, types
 
-from tg_bot.keyboards.client import get_main_rkb
+from tg_bot.keyboards.client import (
+    get_main_rkb,
+    get_politics_ikb,
+    get_sport_ikb,
+    get_games_ikb
+)
 
 
 async def cmd_start(message: types.Message):
-    await message.bot.send_animation(chat_id=message.chat.id,
-                                     animation=open(
-                                         os.path.join(os.getcwd(), 'tg_bot', 'data', 'media', 'greeting_gif.mp4'),
-                                         'rb'))
+    await message.bot.send_animation(chat_id=message.chat.id, animation=open(
+        os.path.join(os.getcwd(), 'tg_bot', 'data', 'media', 'greeting_gif.mp4'), 'rb'))
     await message.answer(f"Welcome, {message.from_user.first_name}!", reply_markup=get_main_rkb())
 
 
@@ -20,6 +23,12 @@ async def cmd_help(message: types.Message):
         'under this message and choose the type of news you want to receive. After that the bot will reply you with '
         'available newspapers. Choose one and obtain all the information that was published for the last time.',
         reply_markup=get_main_rkb())
+
+
+async def politics(message: types.Message):
+    await message.message(f'Choose broadcaster.', reply_markup=get_politics_ikb())
+
+# async def
 
 
 def register_client_handlers(dp: Dispatcher):

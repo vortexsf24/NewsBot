@@ -15,7 +15,6 @@ sports_list = InlineKeyboardMarkup(row_width=2)
 sports_list.add(InlineKeyboardButton(text="Guardiansport", callback_data="guardiansport"),
                 InlineKeyboardButton(text="Skysports", callback_data="skysports"),
                 InlineKeyboardButton(text="Sportingnews", callback_data="sportingnews"),
-                InlineKeyboardButton(text="Deadspin", callback_data="deadspin"),
                 InlineKeyboardButton(text="Euronews Sports", callback_data="euronews_sport"),
                 InlineKeyboardButton(text="CNN Sports", callback_data="cnn_sports"))
 
