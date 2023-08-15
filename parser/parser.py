@@ -415,6 +415,5 @@ async def main(config: Config) -> None:
             await connection.update_news(paper_name=result[0], news=result[1])
 
         logging.info(f'Process of collecting news took {time.monotonic() - start_time} seconds')
-        logging.info(f'Process of collecting news took {time.monotonic() - start_time} seconds')
 
         await asyncio.sleep(300)

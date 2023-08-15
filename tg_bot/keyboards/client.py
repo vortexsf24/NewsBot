@@ -9,8 +9,8 @@ def get_main_rkb() -> ReplyKeyboardMarkup:
     Appear after /start command.
     """
 
-    keyboard = ReplyKeyboardMarkup(resize_keyboard=True, input_field_placeholder='Choose news type you want to read.')
-    keyboard.add('Politics').add('Sports').add('Games')
+    keyboard = ReplyKeyboardMarkup(resize_keyboard=True, input_field_placeholder='What do you wanna read about?')
+    keyboard.add('Politics').add('Sport').add('Games')
 
     return keyboard
 

@@ -1,3 +1,4 @@
+import asyncio
 import os
 
 from aiogram import Dispatcher, types
@@ -9,11 +10,13 @@ from tg_bot.keyboards.client import (
     get_games_ikb
 )
 
+from tg_bot.services.database import BotDB
+
 
 async def cmd_start(message: types.Message):
     await message.bot.send_animation(chat_id=message.chat.id, animation=open(
         os.path.join(os.getcwd(), 'tg_bot', 'data', 'media', 'greeting_gif.mp4'), 'rb'))
-    await message.answer(f"Welcome, {message.from_user.first_name}!", reply_markup=get_main_rkb())
+    await message.answer(f'Welcome, {message.from_user.first_name}!', reply_markup=get_main_rkb())
 
 
 async def cmd_help(message: types.Message):
@@ -25,12 +28,61 @@ async def cmd_help(message: types.Message):
         reply_markup=get_main_rkb())
 
 
-async def politics(message: types.Message):
-    await message.message(f'Choose broadcaster.', reply_markup=get_politics_ikb())
+async def cmd_none(message: types.Message):
+    await message.answer('If you are confused use /help command.')
 
-# async def
+
+async def politics(message: types.Message):
+    await message.answer(f'Choose broadcaster.', reply_markup=get_politics_ikb())
+
+
+async def sport(message: types.Message):
+    await message.answer(f'Choose broadcaster.', reply_markup=get_sport_ikb())
+
+
+async def games(message: types.Message):
+    await message.answer(f'Choose broadcaster.', reply_markup=get_games_ikb())
+
+
+def create_news_message(news: list) -> str:
+    """
+    Forms formatted message containing actual news which will be sent to user.
+    It's made from the list of dictionaries where each object contain link and article.
+
+    Args:
+        news (list): A list of dictionaries where each dictionary contains a link and an article.
+
+    Returns:
+        news_message (str): A formatted message with links to the articles.
+    """
+
+    news_message = '<b>Actual news from this portal:</b>\n'
+
+    for section in news:
+        news_message += f'• <a href="{section.get("link")}">{section.get("article")}</a>\n\n'
+
+    return news_message
+
+
+async def send_news(callback_query: types.CallbackQuery):
+    db = BotDB(callback_query.bot['config'])
+    await db.create_pool()
+
+    news = await db.get_news(callback_query.data)
+    news_message = await asyncio.to_thread(create_news_message, news)
+
+    await callback_query.bot.send_message(callback_query.from_user.id, text=f'{news_message}', parse_mode='HTML',
+                                          disable_web_page_preview=True)
 
 
 def register_client_handlers(dp: Dispatcher):
     dp.register_message_handler(cmd_start, commands=['start'])
     dp.register_message_handler(cmd_help, commands=['help'])
+
+    dp.register_message_handler(politics, text='Politics')
+    dp.register_message_handler(sport, text='Sport')
+    dp.register_message_handler(games, text='Games')
+
+    dp.register_message_handler(cmd_none)
+
+    dp.register_callback_query_handler(send_news)

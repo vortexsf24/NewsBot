@@ -74,7 +74,7 @@ class BotDB:
         except Exception as _ex:
             logging.error(_ex)
 
-    async def get_news(self, paper_name: str) -> list:
+    async def get_news(self, paper_name: str) -> list[dict, ...]:
         """
         Retrieves news from the table of a paper which you choose.
 
