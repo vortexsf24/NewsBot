@@ -4,6 +4,7 @@ import logging
 from aiogram import Bot, Dispatcher
 
 from tg_bot.config import load_config, Config
+from tg_bot.parser.parser import start_parsing
 from tg_bot.handlers.client import register_client_handlers
 
 logging.basicConfig(
@@ -38,11 +39,16 @@ async def main():
     # register_all_filters(dp)
     register_all_handlers(dp)
 
+    polling_task = asyncio.create_task(dp.start_polling())
+    parsing_task = asyncio.create_task(start_parsing(config))
+
     try:
-        await dp.start_polling()
+        await asyncio.gather(polling_task, parsing_task)
 
     finally:
         await bot.session.close()
+        parsing_task.cancel()
+
         logging.info('Bot has been stopped!')
 
 

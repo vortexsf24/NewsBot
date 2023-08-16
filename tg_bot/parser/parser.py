@@ -373,7 +373,7 @@ async def parse_euronews_sport() -> tuple:
         logging.error(_ex)
 
 
-async def main(config: Config) -> None:
+async def start_parsing(config: Config) -> None:
     """
     Responsible for the presence of actual news in the database so they can be sent to user.
     Asynchronously runs all functions responding for retrieving news from the internet.
@@ -414,6 +414,6 @@ async def main(config: Config) -> None:
         for result in await asyncio.gather(*tasks):
             await connection.update_news(paper_name=result[0], news=result[1])
 
-        logging.info(f'Process of collecting news took {time.monotonic() - start_time} seconds')
+        logging.info(f'Process of collecting news took {round(time.monotonic() - start_time, 1)} seconds')
 
         await asyncio.sleep(300)

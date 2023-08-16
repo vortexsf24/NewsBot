@@ -29,7 +29,7 @@ async def cmd_help(message: types.Message):
 
 
 async def cmd_none(message: types.Message):
-    await message.answer('If you are confused use /help command.')
+    await message.answer('If you are confused use /help command.', reply_markup=get_main_rkb())
 
 
 async def politics(message: types.Message):
@@ -69,8 +69,9 @@ async def send_news(callback_query: types.CallbackQuery):
     await db.create_pool()
 
     news = await db.get_news(callback_query.data)
-    news_message = await asyncio.to_thread(create_news_message, news)
+    db.pool.close()
 
+    news_message = await asyncio.to_thread(create_news_message, news)
     await callback_query.bot.send_message(callback_query.from_user.id, text=f'{news_message}', parse_mode='HTML',
                                           disable_web_page_preview=True)
 
@@ -86,3 +87,7 @@ def register_client_handlers(dp: Dispatcher):
     dp.register_message_handler(cmd_none)
 
     dp.register_callback_query_handler(send_news)
+
+# подключить middleware
+# добавить всемозможные хендлеры ошибок
+# убрать уведомления от aiogram
