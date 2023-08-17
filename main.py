@@ -6,6 +6,8 @@ from aiogram import Bot, Dispatcher
 from tg_bot.config import load_config, Config
 from tg_bot.parser.parser import start_parsing
 from tg_bot.handlers.client import register_client_handlers
+from tg_bot.middlewares.ThrottlingMiddleware import ThrottlingMiddleware
+from aiogram.contrib.fsm_storage.memory import MemoryStorage
 
 logging.basicConfig(
     level=logging.INFO,
@@ -13,8 +15,8 @@ logging.basicConfig(
 )
 
 
-# def register_all_middlewares(dp):
-#     dp.setup_middleware(...)
+def register_all_middlewares(dp):
+    dp.setup_middleware(ThrottlingMiddleware())
 
 
 # def register_all_filters(dp):
@@ -32,10 +34,12 @@ async def main():
     bot = Bot(token=config.tg_bot.TOKEN, parse_mode='HTML')
     bot['config'] = config
 
-    dp = Dispatcher(bot)
+    storage = MemoryStorage()
+
+    dp = Dispatcher(bot, storage=storage)
     await dp.skip_updates()
 
-    # register_all_middlewares(dp)
+    register_all_middlewares(dp)
     # register_all_filters(dp)
     register_all_handlers(dp)
 
