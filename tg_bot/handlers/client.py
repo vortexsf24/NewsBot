@@ -87,7 +87,3 @@ def register_client_handlers(dp: Dispatcher):
     dp.register_message_handler(cmd_none)
 
     dp.register_callback_query_handler(send_news)
-
-# подключить middleware
-# добавить всемозможные хендлеры ошибок
-# убрать уведомления от aiogram
