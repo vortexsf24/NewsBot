@@ -14,6 +14,12 @@ from tg_bot.services.database import BotDB
 
 
 async def cmd_start(message: types.Message):
+    db = BotDB(message.bot['config'])
+    await db.create_pool()
+    print(await db.get_user_quantity())
+    await db.add_user(message.from_user.id)
+    db.pool.close()
+
     await message.bot.send_animation(chat_id=message.chat.id, animation=open(
         os.path.join(os.getcwd(), 'tg_bot', 'data', 'media', 'greeting_gif.mp4'), 'rb'))
     await message.answer(f'Welcome, {message.from_user.first_name}!', reply_markup=get_main_rkb())

@@ -46,6 +46,53 @@ class BotDB:
         except Exception as _ex:
             logging.error(_ex)
 
+    async def add_user(self, user_id: int) -> None:
+        """
+        Adds a user to the database with the provided user ID.
+        Method firstly checks the presence of user in the database.
+
+        Args:
+            user_id (int): The ID of the user to add.
+
+        Returns:
+            None
+        """
+        
+        try:
+            async with self.pool.acquire() as connection:
+                async with connection.cursor() as cursor:
+                    select_query = 'SELECT * FROM user WHERE user_id=%s'
+                    await cursor.execute(select_query, (user_id,))
+                    if await cursor.fetchone():
+                        return
+
+                    insert_query = 'INSERT INTO user (user_id) VALUES (%s);'
+                    await cursor.execute(insert_query, (user_id,))
+                    await connection.commit()
+
+        except Exception as ex:
+            logging.error(ex)
+
+    async def get_user_quantity(self) -> None:
+        """
+        Retrieves the quantity of users in the database.
+
+        Returns:
+            user_quantity: The number of users in the database.
+        """
+
+        try:
+            async with self.pool.acquire() as connection:
+                async with connection.cursor() as cursor:
+                    select_query = 'SELECT * FROM user'
+                    await cursor.execute(select_query)
+                    rows = await cursor.fetchall()
+                    user_quantity = len(rows)
+                    return user_quantity
+
+        except Exception as _ex:
+            logging.error(_ex)
+
     async def update_news(self, paper_name: str, news: list) -> None:
         """
         Replaces all news of a certain paper with the relevant news.

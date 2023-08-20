@@ -5,6 +5,7 @@ from environs import Env
 @dataclass
 class TgBot:
     TOKEN: str
+    ADMIN_IDS: tuple[int, ...]
 
 
 @dataclass
@@ -29,6 +30,7 @@ def load_config() -> Config:
     return Config(
         tg_bot=TgBot(
             TOKEN=env.str('BOT_TOKEN'),
+            ADMIN_IDS=tuple(map(int, env.list('BOT_ADMINS')))
         ),
         db=DbConfig(
             HOST=env.str('DB_HOST'),
