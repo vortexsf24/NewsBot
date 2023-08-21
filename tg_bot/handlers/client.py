@@ -9,7 +9,6 @@ from tg_bot.keyboards.client import (
     get_sport_ikb,
     get_games_ikb
 )
-
 from tg_bot.services.database import BotDB
 
 
@@ -35,7 +34,7 @@ async def cmd_help(message: types.Message):
 
 
 async def cmd_none(message: types.Message):
-    await message.answer('If you are confused use /help command.', reply_markup=get_main_rkb())
+    await message.answer('If you are confused use /help command.')
 
 
 async def politics(message: types.Message):

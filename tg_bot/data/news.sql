@@ -48,17 +48,6 @@ CREATE TABLE `cnn_sport` (
 -- --------------------------------------------------------
 
 --
--- Структура таблицы `deadspin`
---
-
-CREATE TABLE `deadspin` (
-  `article` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `link` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
--- --------------------------------------------------------
-
---
 -- Структура таблицы `euronews`
 --
 
@@ -66,6 +55,7 @@ CREATE TABLE `euronews` (
   `article` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `link` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
 
 -- --------------------------------------------------------
 
@@ -176,6 +166,16 @@ CREATE TABLE `thegamer` (
   `article` text NOT NULL,
   `link` text NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Структура таблицы `user`
+--
+
+CREATE TABLE `user` (
+  `user_id` int NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 

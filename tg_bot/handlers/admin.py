@@ -1,14 +1,12 @@
-import asyncio
 import os
 
 from aiogram import Dispatcher, types
 
-from tg_bot.filters.admin import IsAdmin
 from tg_bot.keyboards.admin import (
     get_main_rkb,
     get_admin_ikb
 )
-
+from tg_bot.filters.admin import IsAdmin
 from tg_bot.services.database import BotDB
 
 
@@ -31,11 +29,6 @@ async def cmd_admin(message: types.Message):
     await message.answer('What is your will, my lord?', reply_markup=get_admin_ikb())
 
 
-async def cmd_none(message: types.Message):
-    await message.answer('If you are confused use /help command.\nType "Admin" to enter the admin panel.',
-                         reply_markup=get_main_rkb())
-
-
 async def user_quantity(callback_query: types.CallbackQuery):
     db = BotDB(callback_query.bot['config'])
     await db.create_pool()
@@ -48,5 +41,5 @@ def register_admin_handlers(dp: Dispatcher):
     dp.register_message_handler(cmd_start, IsAdmin(), commands=['start'])
     dp.register_message_handler(cmd_help, IsAdmin(), commands=['help'])
     dp.register_message_handler(cmd_admin, IsAdmin(), text='Admin')
-    dp.register_message_handler(cmd_none, IsAdmin())
+
     dp.register_callback_query_handler(user_quantity, text='user_quantity')

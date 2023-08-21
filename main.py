@@ -2,14 +2,14 @@ import asyncio
 import logging
 
 from aiogram import Bot, Dispatcher
+from aiogram.contrib.fsm_storage.memory import MemoryStorage
 
+from tg_bot.filters.admin import IsAdmin
 from tg_bot.config import load_config, Config
 from tg_bot.parser.parser import start_parsing
-from tg_bot.handlers.client import register_client_handlers
 from tg_bot.handlers.admin import register_admin_handlers
-from tg_bot.filters.admin import IsAdmin
+from tg_bot.handlers.client import register_client_handlers
 from tg_bot.middlewares.ThrottlingMiddleware import ThrottlingMiddleware
-from aiogram.contrib.fsm_storage.memory import MemoryStorage
 
 logging.basicConfig(
     level=logging.INFO,
@@ -61,8 +61,3 @@ async def main():
 
 if __name__ == '__main__':
     asyncio.run(main())
-
-
-# переписать update_news
-# методы для записи вбд юзера и доставания колва
-# новая sql таблица

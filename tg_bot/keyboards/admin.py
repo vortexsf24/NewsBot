@@ -17,7 +17,7 @@ def get_main_rkb() -> ReplyKeyboardMarkup:
 
 def get_admin_ikb() -> InlineKeyboardMarkup:
     """
-
+    InlineKeyboardMarkup for commands in admin panel.
     """
 
     keyboard = InlineKeyboardMarkup(row_width=1)
