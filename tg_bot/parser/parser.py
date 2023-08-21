@@ -414,6 +414,7 @@ async def start_parsing(config: Config) -> None:
         for result in await asyncio.gather(*tasks):
             await connection.update_news(paper_name=result[0], news=result[1])
 
+        connection.pool.close()
         logging.info(f'Process of collecting news took {round(time.monotonic() - start_time, 1)} seconds')
 
         await asyncio.sleep(300)
